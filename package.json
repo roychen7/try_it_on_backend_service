@@ -1,0 +1,28 @@
+{
+  "name": "try_it_on_backend_service",
+  "version": "1.0.0",
+  "description": "This is the backend service for the web app Try It On",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kendricchung/try_it_on_backend_service.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kendricchung/try_it_on_backend_service/issues"
+  },
+  "homepage": "https://github.com/kendricchung/try_it_on_backend_service#readme",
+  "dependencies": {
+    "googleapis": "^39.2.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-preset-es2015": "^6.24.1",
+    "http-server": "^0.11.1"
+  }
+}
