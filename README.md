@@ -15,3 +15,4 @@
     - Please go to Jenkins.io and install Jenkins for your machine
     - Go through all of the steps to install it on your machine (Create your user, keep it at localhost:8080)
     - Create a pipeline by going to the Main Page -> New Item -> Pipeline (enter item name: TBA) -> 
+

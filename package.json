@@ -2,7 +2,7 @@
   "name": "try_it_on_backend_service",
   "version": "1.0.0",
   "description": "This is the backend service for the web app Try It On",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "npm test"
   },
@@ -16,9 +16,9 @@
     "url": "https://github.com/kendricchung/try_it_on_backend_service/issues"
   },
   "homepage": "https://github.com/kendricchung/try_it_on_backend_service#readme",
-  "dependencies": {},
-  "devDependencies": {
-    "newman": "^4.5.4",
-    "braces": ">=2.3.1"
-  }
+  "dependencies": {
+    "braces": ">=2.3.1",
+    "express": "^4.17.1",
+  },
+  "devDependencies": {}
 }
