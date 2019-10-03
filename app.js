@@ -24,7 +24,7 @@ app.get('/users/:id', async function (req, res) {
   console.log(userId);
   if (userId) {
     const result = await _index.getUser(userId);
-    res.send(userId);
+    res.send(result);
   } else {
     res.send('Invalid User ID');
   }

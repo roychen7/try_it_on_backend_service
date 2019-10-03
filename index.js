@@ -21,6 +21,33 @@ const helloWorld = exports.helloWorld = function helloWorld() {
     return "Hello World";
 };
 
+const getUser = exports.getUser = async function getUser(userId) {
+    console.log('index.js::getUser');
+    return db.where({user_id : userId}).from('users').then(
+        users =>  {
+            const {
+                user_id,
+                first_name,
+                last_name,
+                username,
+                email,
+                password
+            } = users[0];
+        
+            return {
+                user_id:user_id,
+                first_name:first_name,
+                last_name:last_name,
+                username:username,
+                email:email,
+                password:password
+            }
+        }
+    ).catch(error => {
+        throw Error(error);
+    })
+}
+
 const postUser = exports.postUser = async function postUser(body) {
     console.log('index.js::postUser');
 
@@ -47,5 +74,8 @@ const postUser = exports.postUser = async function postUser(body) {
                 return {message: "user " + userid + " has been created"};
             }
         )
+    }).catch(error => {
+        console.log('There has been an error', error);
+        throw Error(error);
     })
 }
