@@ -2,11 +2,12 @@
   "name": "try_it_on_backend_service",
   "version": "1.0.0",
   "description": "This is the backend service for the web app Try It On",
-  "main": "app.js",
+  "main": "src/app.js",
   "scripts": {
     "test": "npm test",
     "build": "babel --presets es2015 src/app.js src/index.js",
-    "dev": "node src/app.js"
+    "dev": "node src/app.js",
+    "stop": "killall node"
   },
   "repository": {
     "type": "git",

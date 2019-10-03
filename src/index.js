@@ -48,15 +48,36 @@ const getUser = exports.getUser = async function getUser(userId) {
     })
 }
 
+const getUsers = exports.getUsers = async function getUsers(size) {
+    console.log('index.js::getUsers');
+    return db.from('users').then(
+        users => {
+            let retSize = size;
+            if (size > users.length) {
+                retSize = users.length;
+            }
+            return {
+                size: retSize,
+                list_of_users: users.splice(0, retSize) 
+            }
+        }
+    ).catch(error => {
+        throw Error(error);
+    });
+}
+
 const postUser = exports.postUser = async function postUser(body) {
     console.log('index.js::postUser');
 
-    return db.transaction(trans => {
-        
-        let userid;
+    const encoded = base64encode(body.username);
+    console.log(encoded);
 
-        const encoded = base64encode(body.username);
-        console.log(encoded);
+    if (await userAlreadyCreated(encoded)) {
+        return { message: 'User already exists.', code: 400 };
+    }
+    
+    return db.transaction(trans => {
+        let userid;
 
         const userRow = {
             user_id: encoded,
@@ -75,7 +96,23 @@ const postUser = exports.postUser = async function postUser(body) {
             }
         )
     }).catch(error => {
-        console.log('There has been an error', error);
-        throw Error(error);
+        console.log('There has been an error:', error);
+        throw {message: 'Something is wrong', code: 500};
     })
+}
+
+const userAlreadyCreated = async function userAlreadyCreated(userId) {
+    console.log('index.js::userAlreadyCreated');
+
+    return db.select('user_id').where({user_id:userId}).from('users').then(
+        ids => {
+            let result;
+            if (ids.size === 0) {
+                result = false;
+            } else {
+                result = true;
+            }
+            return result;
+        }
+    )
 }
