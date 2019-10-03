@@ -57,6 +57,7 @@ app.post('/users', async function (req, res) {
   console.log(req.body);
   if (req.body) {
     const result = await _index.postUser(req.body);
+    console.log(result);
     return res.send(result);
   } else {
     return res.send('There is no body');
