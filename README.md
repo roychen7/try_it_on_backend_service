@@ -10,6 +10,11 @@
     - Be specific on what you did in your commit (this is so that we can keep track of what is happening)
     - COMMIT OFTEN!! I usually get told to commit often when I am at work, and this is because we always need to keep track   of when and if the code breaks
 
+#Starting on the Project:
+    - Make sure you run: npm i --no-optional
+    - To start the express server, run: npm run dev
+    - You may now make Postman calls to the express server to test your endpoints as you code along 
+
 # For Jenkins Pipeline setup:
     - Please go to Jenkins.io and install Jenkins for your machine
     - Go through all of the steps to install it on your machine 
