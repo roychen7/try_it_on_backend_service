@@ -5,8 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "npm test",
-    "build": "babel --presets es2015 app.js index.js",
-    "dev": "node app.js"
+    "build": "babel --presets es2015 src/app.js src/index.js",
+    "dev": "node src/app.js"
   },
   "repository": {
     "type": "git",
