@@ -24,10 +24,28 @@ app.get('/users/:id', async function (req, res) {
   console.log(userId);
   if (userId) {
     const result = await _index.getUser(userId);
-    res.send(result);
+    return res.send(result);
   } else {
-    res.send('Invalid User ID');
+    return res.send('Invalid User ID');
   }
+});
+
+app.get('/users', async function (req, res) {
+  console.log('app.js::getUsers');
+  console.log(req.url);
+  console.log(req.query);
+
+  try {
+    if (req.query) {
+      const result = await _index.getUsers(req.query.size);
+      return res.send(result);
+    } else {
+      return res.send('There are no queries');
+    }
+  } catch (error) {
+      return res.status(500).send(error);
+  }
+  
 });
 
 app.post('/users', async function (req, res) {
@@ -36,9 +54,31 @@ app.post('/users', async function (req, res) {
   console.log(req.body);
   if (req.body) {
     const result = await _index.postUser(req.body);
-    res.send(result);
+    console.log(result);
+    return res.send(result);
   } else {
-    res.send('There is no body');
+    return res.send('There is no body');
+  }
+});
+
+app.put('/users/:id', async function (req, res) {
+  console.log('app.js::putUser');
+  
+  var firstIndex = req.url.lastIndexOf('/');
+  var lastIndex = req.url.indexOf('password');
+  const userId = req.url.slice(firstIndex + 1,lastIndex - 1);
+  console.log(userId);
+
+  if (lastIndex === -1) {
+    return res.send('No new password found');
+  }
+
+  if (req.query) {
+    const result = await _index.putUser(userId, req.query.password);;
+    console.log(result);
+    return res.send(result);
+  } else {
+    return res.send('There is no query');
   }
 });
 
