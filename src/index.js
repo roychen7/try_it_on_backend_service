@@ -67,6 +67,17 @@ const getUsers = exports.getUsers = async function getUsers(size) {
     });
 }
 
+const getAllUsers = exports.getAllUsers = async function getAllUsers() {
+    console.log('index.js::getAllUsers');
+    return db.from('users').then(
+        users => {
+            return users;
+        }
+    ).catch(error => {
+        throw Error(error);
+    })
+}
+
 const postUser = exports.postUser = async function postUser(body) {
     console.log('index.js::postUser');
 
