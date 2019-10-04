@@ -23,6 +23,7 @@ const helloWorld = exports.helloWorld = function helloWorld() {
 
 const getUser = exports.getUser = async function getUser(userId) {
     console.log('index.js::getUser');
+    console.log(userId);
     return db.where({user_id : userId}).from('users').then(
         users =>  {
             const {
@@ -53,12 +54,12 @@ const getUsers = exports.getUsers = async function getUsers(size) {
     return db.from('users').then(
         users => {
             let retSize = size;
-            if (size > users.length) {
+            if (retSize > users.length) {
                 retSize = users.length;
             }
             return {
                 size: retSize,
-                list_of_users: users.splice(0, retSize) 
+                list_of_users: users.splice(0, retSize)
             }
         }
     ).catch(error => {
@@ -101,13 +102,37 @@ const postUser = exports.postUser = async function postUser(body) {
     })
 }
 
+const putUser = exports.putUser = async function putUser(userId, password) {
+    console.log('index.js::putUser');
+    // check if new password != old password
+    // if different, replace old password with new password 
+
+    const user = await getUser(userId);
+    console.log(user);
+    if (user.password === password) {
+        return {message: 'The password entered is the same as the old one.'};
+    }
+    return db.from('users').where({user_id:userId}).update(
+        {
+            password: password,
+        }).then(
+            ret => {
+                return {message: 'Successfully changed password.'};
+            }
+        ).catch(error => {
+            console.log('There has been an error:', error);
+            throw {message: 'Something went wrong', code: 500};
+        })
+}
+
 const userAlreadyCreated = async function userAlreadyCreated(userId) {
     console.log('index.js::userAlreadyCreated');
 
     return db.select('user_id').where({user_id:userId}).from('users').then(
         ids => {
+            console.log(ids);   
             let result;
-            if (ids.size === 0) {
+            if (ids.length === 0) {
                 result = false;
             } else {
                 result = true;

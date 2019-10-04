@@ -31,16 +31,13 @@ app.get('/users/:id', async function (req, res) {
 });
 
 app.get('/users', async function (req, res) {
-  console.log('app.js::getUser');
+  console.log('app.js::getUsers');
   console.log(req.url);
   console.log(req.query);
 
   try {
     if (req.query) {
       const result = await _index.getUsers(req.query.size);
-      if (result.contains(code)) {
-        return res.send(result);
-      }
       return res.send(result);
     } else {
       return res.send('There are no queries');
@@ -61,6 +58,27 @@ app.post('/users', async function (req, res) {
     return res.send(result);
   } else {
     return res.send('There is no body');
+  }
+});
+
+app.put('/users/:id', async function (req, res) {
+  console.log('app.js::putUser');
+  
+  var firstIndex = req.url.lastIndexOf('/');
+  var lastIndex = req.url.indexOf('password');
+  const userId = req.url.slice(firstIndex + 1,lastIndex - 1);
+  console.log(userId);
+
+  if (lastIndex === -1) {
+    return res.send('No new password found');
+  }
+
+  if (req.query) {
+    const result = await _index.putUser(userId, req.query.password);;
+    console.log(result);
+    return res.send(result);
+  } else {
+    return res.send('There is no query');
   }
 });
 
