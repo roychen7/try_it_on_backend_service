@@ -36,16 +36,16 @@ app.get('/users', async function (req, res) {
   console.log(req.query);
 
   try {
-    if (req.query) {
+    if (req.query.size) {
       const result = await _index.getUsers(req.query.size);
       return res.send(result);
     } else {
-      return res.send('There are no queries');
+      const result = await _index.getAllUsers();
+      return res.send(result)
     }
   } catch (error) {
-      return res.status(500).send(error);
+      return res.send('An error occured', error);
   }
-  
 });
 
 app.post('/users', async function (req, res) {
