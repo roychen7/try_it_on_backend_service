@@ -23,7 +23,8 @@ app.get('/users/:id', async function (req, res) {
   const userId = req.url.substring(index + 1);
   console.log(userId);
   // getting authToken from queryParams
-  const authToken = req.headers['authToken'];
+  const authToken = req.headers.auth_token;
+  console.log(authToken);
 
   try {
     const result = await _index.getUser(authToken, userId);
