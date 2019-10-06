@@ -74,8 +74,22 @@ const getUser = exports.getUser = async function getUser(authToken, userId) {
     })
 }
 
-const getUsers = exports.getUsers = async function getUsers(size) {
+const getUsers = exports.getUsers = async function getUsers(authToken, size) {
     console.log('index.js::getUsers');
+
+    if (!authToken) {
+        throw {
+            message: 'Forbidden; No authToken given', 
+            code: 401
+        }
+    }
+
+    if (!size) {
+        throw {
+            message: 'No size given',
+            code: 400
+        }
+    }
 
     return db.from('users').then(
         users => {
@@ -98,7 +112,8 @@ const getUsers = exports.getUsers = async function getUsers(size) {
             };
         }
     ).catch(error => {
-        throw Error(error);
+        console.log(error);
+        throw error;
     });
 }
 
@@ -151,13 +166,34 @@ const postUser = exports.postUser = async function postUser(authToken, body) {
     })
 }
 
-const putUser = exports.putUser = async function putUser(userId, body) {
+const putUser = exports.putUser = async function putUser(authToken, userId, body) {
     console.log('index.js::putUser');
 
-    if (!(body.action && body.value)) {
+    if (!authToken) {
         throw {
-            message: 'There was no action or value',
-            error: 400
+            message: 'Forbidden; No Auth Token given',
+            code: 401
+        }
+    }
+
+    if (!body || !body.action || !body.value) {
+        throw {
+            message: 'Request body not found or invalid',
+            code: 400
+        }
+    }
+
+    if (body.action != 'password' && body.action != 'first_name' && body.action != 'last_name') {
+        throw {
+            message: 'Body action invalid',
+            code: 405
+        }
+    }
+
+    if (body.value.length > 50) {
+        throw {
+            message: 'Input string too long',
+            code: 400
         }
     }
 
