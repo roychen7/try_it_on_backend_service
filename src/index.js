@@ -67,17 +67,6 @@ const getUsers = exports.getUsers = async function getUsers(size) {
     });
 }
 
-const getAllUsers = exports.getAllUsers = async function getAllUsers() {
-    console.log('index.js::getAllUsers');
-    return db.from('users').then(
-        users => {
-            return users;
-        }
-    ).catch(error => {
-        throw Error(error);
-    })
-}
-
 const postUser = exports.postUser = async function postUser(body) {
     console.log('index.js::postUser');
 
@@ -113,27 +102,32 @@ const postUser = exports.postUser = async function postUser(body) {
     })
 }
 
-const putUser = exports.putUser = async function putUser(userId, password) {
+const putUser = exports.putUser = async function putUser(userId, body) {
     console.log('index.js::putUser');
-    // check if new password != old password
-    // if different, replace old password with new password 
 
-    const user = await getUser(userId);
-    console.log(user);
-    if (user.password === password) {
-        return {message: 'The password entered is the same as the old one.'};
+    if (body.action || body.value) {
+        throw {
+            message: 'There was no action or value',
+            error: 400
+        }
     }
-    return db.from('users').where({user_id:userId}).update(
-        {
-            password: password,
-        }).then(
-            ret => {
-                return {message: 'Successfully changed password.'};
-            }
-        ).catch(error => {
-            console.log('There has been an error:', error);
-            throw {message: 'Something went wrong', code: 500};
-        })
+
+    return db.transaction(trx => {
+        const action = body.action;
+
+        return trx
+            .from('users')
+            .where({ user_id: userId })
+            .update({ action: body.value })
+            .then(result => {
+                if (result === 1) {
+                    return { message: 'Successfully changed ' + action, code: 200};
+                }
+            })
+    }).catch(error =>  {
+        console.log(error);
+        throw { message: 'Something went wrong', code: 500}
+    });
 }
 
 const userAlreadyCreated = async function userAlreadyCreated(userId) {

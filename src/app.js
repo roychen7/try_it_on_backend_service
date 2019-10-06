@@ -22,11 +22,15 @@ app.get('/users/:id', async function (req, res) {
   const index = req.url.lastIndexOf('/');
   const userId = req.url.substring(index + 1);
   console.log(userId);
-  if (userId) {
-    const result = await _index.getUser(userId);
-    return res.send(result);
-  } else {
-    return res.send('Invalid User ID');
+  try {
+    if (userId) {
+      const result = await _index.getUser(userId);
+      return res.send(result);
+    } else {
+      return res.send('Invalid User ID');
+    }
+  } catch(error) {
+    return res.send(error);
   }
 });
 
@@ -39,12 +43,9 @@ app.get('/users', async function (req, res) {
     if (req.query.size) {
       const result = await _index.getUsers(req.query.size);
       return res.send(result);
-    } else {
-      const result = await _index.getAllUsers();
-      return res.send(result)
-    }
+    } 
   } catch (error) {
-      return res.send('An error occured', error);
+    return res.send('An error occured', error);
   }
 });
 
@@ -63,26 +64,25 @@ app.post('/users', async function (req, res) {
 
 app.put('/users/:id', async function (req, res) {
   console.log('app.js::putUser');
-  
-  var firstIndex = req.url.lastIndexOf('/');
-  var lastIndex = req.url.indexOf('password');
-  const userId = req.url.slice(firstIndex + 1,lastIndex - 1);
+
+  const index = req.url.lastIndexOf('/');
+  const userId = req.url.substring(index + 1);
   console.log(userId);
 
-  if (lastIndex === -1) {
-    return res.send('No new password found');
-  }
-
-  if (req.query) {
-    const result = await _index.putUser(userId, req.query.password);;
-    console.log(result);
-    return res.send(result);
-  } else {
-    return res.send('There is no query');
+  try {
+    if (userId && req.body) {
+      const result = await putUser(userId, req.body);
+      return res.send(result);
+    } else {
+      throw {
+        message: 'Body not found',
+        code: 400
+      }
+    }
+  } catch (error) {
+    return res.send(error);
   }
 });
-
-
 
 app.listen(port, function () {
   return console.log('App listening on port ' + port + '!');
