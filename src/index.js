@@ -93,10 +93,13 @@ const postUser = exports.postUser = async function postUser(authToken, body) {
             code: 400
         };
     }
+
+    const encoded = base64encode(body.username);
+    if (await userAlreadyCreated(encoded)) {
+        return {message: "user " + encoded + " has already been created", code: 201};
+    }
     
     return db.transaction(trans => {
-        const encoded = base64encode(body.username);
-
         const userRow = {
             user_id: encoded,
             first_name: body.first_name,
@@ -114,8 +117,6 @@ const postUser = exports.postUser = async function postUser(authToken, body) {
                 userid = ids[0];
                 if (userid) {
                     return {message: "user " + userid + " has been created", code: 200};
-                } else {
-                    return {message: "user " + encoded + " has already been created", code: 201};
                 }
             }
         )
@@ -151,4 +152,21 @@ const putUser = exports.putUser = async function putUser(userId, body) {
         console.log(error);
         throw { message: 'Something went wrong', code: 500}
     });
+}
+
+const userAlreadyCreated = async function userAlreadyCreated(userId) {
+    console.log('index.js::userAlreadyCreated');
+
+    return db.select('user_id').where({user_id:userId}).from('users').then(
+        ids => {
+            console.log(ids);   
+            let result;
+            if (ids.length === 0) {
+                result = false;
+            } else {
+                result = true;
+            }
+            return result;
+        }
+    )
 }
