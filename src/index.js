@@ -105,7 +105,7 @@ const postUser = exports.postUser = async function postUser(body) {
 const putUser = exports.putUser = async function putUser(userId, body) {
     console.log('index.js::putUser');
 
-    if (body.action || body.value) {
+    if (!(body.action && body.value)) {
         throw {
             message: 'There was no action or value',
             error: 400
@@ -118,10 +118,10 @@ const putUser = exports.putUser = async function putUser(userId, body) {
         return trx
             .from('users')
             .where({ user_id: userId })
-            .update({ action: body.value })
+            .update( action, body.value )
             .then(result => {
                 if (result === 1) {
-                    return { message: 'Successfully changed ' + action, code: 200};
+                    return { message: 'Successfully changed ' + action + 'for ' + userId, code: 200};
                 }
             })
     }).catch(error =>  {

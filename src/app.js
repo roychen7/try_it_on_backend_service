@@ -71,7 +71,7 @@ app.put('/users/:id', async function (req, res) {
 
   try {
     if (userId && req.body) {
-      const result = await putUser(userId, req.body);
+      const result = await _index.putUser(userId, req.body);
       return res.send(result);
     } else {
       throw {
