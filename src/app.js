@@ -39,13 +39,21 @@ app.get('/users', async function (req, res) {
   console.log(req.url);
   console.log(req.query);
 
+  const authToken = req.headers.auth_token;
+  console.log(authToken);
+
   try {
-    if (req.query.size) {
-      const result = await _index.getUsers(req.query.size);
-      return res.send(result);
-    } 
+      const result = await _index.getUsers(authToken, req.query.size);
+      return res.status(200).send(result);
   } catch (error) {
-    return res.send('An error occured', error);
+    switch(error.code) {
+      case 401: 
+        return res.status(401).send(error.message);
+      case 400:
+        return res.status(400).send(error.message);
+      default:
+        return res.status(500).send('Something went wrong');
+    }
   }
 });
 

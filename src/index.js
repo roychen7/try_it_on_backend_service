@@ -49,8 +49,22 @@ const getUser = exports.getUser = async function getUser(userId) {
     })
 }
 
-const getUsers = exports.getUsers = async function getUsers(size) {
+const getUsers = exports.getUsers = async function getUsers(authToken, size) {
     console.log('index.js::getUsers');
+
+    if (!authToken) {
+        throw {
+            message: 'Forbidden; No authToken given', 
+            code: 401
+        }
+    }
+
+    if (!size) {
+        throw {
+            message: 'No size given',
+            code: 400
+        }
+    }
 
     return db.from('users').then(
         users => {
@@ -73,7 +87,8 @@ const getUsers = exports.getUsers = async function getUsers(size) {
             };
         }
     ).catch(error => {
-        throw Error(error);
+        console.log(error);
+        throw error;
     });
 }
 
