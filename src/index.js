@@ -51,16 +51,26 @@ const getUser = exports.getUser = async function getUser(userId) {
 
 const getUsers = exports.getUsers = async function getUsers(size) {
     console.log('index.js::getUsers');
+
     return db.from('users').then(
         users => {
-            let retSize = size;
-            if (retSize > users.length) {
+            let retSize;
+            let userResults;
+            if (size) {
+                retSize = size;
+                if (retSize > users.length) {
+                    retSize = users.length;
+                }
+                userResults = users.splice(0, retSize);
+            } else {
                 retSize = users.length;
+                userResults = users;
             }
+            
             return {
                 size: retSize,
-                list_of_users: users.splice(0, retSize)
-            }
+                list_of_users: userResults
+            };
         }
     ).catch(error => {
         throw Error(error);
