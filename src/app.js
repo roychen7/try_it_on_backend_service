@@ -60,14 +60,20 @@ app.get('/users', async function (req, res) {
 
 app.post('/users', async function (req, res) {
   console.log('app.js::postUser');
-  console.log(req.url);
   console.log(req.body);
-  if (req.body) {
-    const result = await _index.postUser(req.body);
-    console.log(result);
-    return res.send(result);
-  } else {
-    return res.send('There is no body');
+
+  try {
+    const result = await _index.postUser(req.headers.auth_token, req.body);
+    return res.status(result.code).send(result.message);
+  } catch (error) {
+    switch (error.code) {
+      case 400:
+        return res.status(400).send(error.message);
+      case 401:
+        return res.status(401).send(error.message);
+      default:
+        return res.status(500).send('Something went wrong');
+    }
   }
 });
 

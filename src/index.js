@@ -15,7 +15,7 @@ const db = knex({
 
 // USE AS A TEMPLATE
 const helloWorld = exports.helloWorld = function helloWorld() {
-    if(db) {
+    if (db) {
         console.log("DB connected");
     }
     return "Hello World";
@@ -46,7 +46,7 @@ const getUser = exports.getUser = async function getUser(authToken, userId) {
                     code: 404
                 }
             }
-
+          
             const {
                 user_id,
                 first_name,
@@ -55,14 +55,14 @@ const getUser = exports.getUser = async function getUser(authToken, userId) {
                 email,
                 password
             } = users[0];
-        
+
             return {
-                user_id:user_id,
-                first_name:first_name,
-                last_name:last_name,
-                username:username,
-                email:email,
-                password:password
+                user_id: user_id,
+                first_name: first_name,
+                last_name: last_name,
+                username: username,
+                email: email,
+                password: password
             }
         }
     ).catch(error => {
@@ -91,7 +91,7 @@ const getUsers = exports.getUsers = async function getUsers(size) {
                 retSize = users.length;
                 userResults = users;
             }
-            
+
             return {
                 size: retSize,
                 list_of_users: userResults
@@ -102,19 +102,29 @@ const getUsers = exports.getUsers = async function getUsers(size) {
     });
 }
 
-const postUser = exports.postUser = async function postUser(body) {
+const postUser = exports.postUser = async function postUser(authToken, body) {
     console.log('index.js::postUser');
 
-    const encoded = base64encode(body.username);
-    console.log(encoded);
-
-    if (await userAlreadyCreated(encoded)) {
-        return { message: 'User already exists.', code: 400 };
+    if (!authToken) {
+        throw {
+            message: 'Forbidden; No authToken give',
+            code: 401
+        }
     }
-    
-    return db.transaction(trans => {
-        let userid;
 
+    if (isEmptyBody(body)) {
+        throw {
+            message: 'Body was not found',
+            code: 400
+        };
+    }
+
+    const encoded = base64encode(body.username);
+    if (await userAlreadyCreated(encoded)) {
+        return { message: "user " + encoded + " has already been created", code: 201 };
+    }
+
+    return db.transaction(trans => {
         const userRow = {
             user_id: encoded,
             first_name: body.first_name,
@@ -124,16 +134,20 @@ const postUser = exports.postUser = async function postUser(body) {
             password: body.password
         }
 
+        let userid;
+
         return trans.insert(userRow, 'user_id').into('users').then(
             ids => {
                 console.log(ids);
                 userid = ids[0];
-                return {message: "user " + userid + " has been created"};
+                if (userid) {
+                    return { message: "user " + userid + " has been created", code: 200 };
+                }
             }
         )
     }).catch(error => {
-        console.log('There has been an error:', error);
-        throw {message: 'Something is wrong', code: 500};
+        console.log(error);
+        throw error;
     })
 }
 
@@ -153,24 +167,24 @@ const putUser = exports.putUser = async function putUser(userId, body) {
         return trx
             .from('users')
             .where({ user_id: userId })
-            .update( action, body.value )
+            .update(action, body.value)
             .then(result => {
                 if (result === 1) {
-                    return { message: 'Successfully changed ' + action + 'for ' + userId, code: 200};
+                    return { message: 'Successfully changed ' + action + 'for ' + userId, code: 200 };
                 }
             })
-    }).catch(error =>  {
+    }).catch(error => {
         console.log(error);
-        throw { message: 'Something went wrong', code: 500}
+        throw { message: 'Something went wrong', code: 500 }
     });
 }
 
 const userAlreadyCreated = async function userAlreadyCreated(userId) {
     console.log('index.js::userAlreadyCreated');
 
-    return db.select('user_id').where({user_id:userId}).from('users').then(
+    return db.select('user_id').where({ user_id: userId }).from('users').then(
         ids => {
-            console.log(ids);   
+            console.log(ids);
             let result;
             if (ids.length === 0) {
                 result = false;
@@ -180,4 +194,8 @@ const userAlreadyCreated = async function userAlreadyCreated(userId) {
             return result;
         }
     )
+}
+
+const isEmptyBody = function isEmptyBody(body) {
+    return (body.constructor == Object && Object.keys(body).length === 0);
 }
