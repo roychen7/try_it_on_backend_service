@@ -80,15 +80,22 @@ const getUsers = exports.getUsers = async function getUsers(size) {
 const postUser = exports.postUser = async function postUser(authToken, body) {
     console.log('index.js::postUser');
 
-    const encoded = base64encode(body.username);
-    console.log(encoded);
+    if (!authToken) {
+        throw {
+            message: 'Forbidden; No authToken give',
+            code: 401
+        }
+    }
 
-    if (await userAlreadyCreated(encoded)) {
-        return { message: 'User already exists.', code: 400 };
+    if (!body) {
+        throw {
+            message: 'Body was not found',
+            code: 400
+        };
     }
     
     return db.transaction(trans => {
-        let userid;
+        const encoded = base64encode(body.username);
 
         const userRow = {
             user_id: encoded,
@@ -99,11 +106,17 @@ const postUser = exports.postUser = async function postUser(authToken, body) {
             password: body.password
         }
 
+        let userid;
+
         return trans.insert(userRow, 'user_id').into('users').then(
             ids => {
                 console.log(ids);
                 userid = ids[0];
-                return {message: "user " + userid + " has been created"};
+                if (userid) {
+                    return {message: "user " + userid + " has been created", code: 200};
+                } else {
+                    return {message: "user " + encoded + " has already been created", code: 201};
+                }
             }
         )
     }).catch(error => {
@@ -138,21 +151,4 @@ const putUser = exports.putUser = async function putUser(userId, body) {
         console.log(error);
         throw { message: 'Something went wrong', code: 500}
     });
-}
-
-const userAlreadyCreated = async function userAlreadyCreated(userId) {
-    console.log('index.js::userAlreadyCreated');
-
-    return db.select('user_id').where({user_id:userId}).from('users').then(
-        ids => {
-            console.log(ids);   
-            let result;
-            if (ids.length === 0) {
-                result = false;
-            } else {
-                result = true;
-            }
-            return result;
-        }
-    )
 }
