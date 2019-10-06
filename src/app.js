@@ -51,10 +51,10 @@ app.get('/users', async function (req, res) {
 
 app.post('/users', async function (req, res) {
   console.log('app.js::postUser');
-  
+
   try {
     const result = await _index.postUser(req.headers.auth_token, req.body);
-    return res.status(200).send(result);
+    return res.status(result.code).send(result.message);
   } catch (error) {
     switch (error.code) {
       case 400:
