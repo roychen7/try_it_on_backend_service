@@ -51,6 +51,7 @@ app.get('/users', async function (req, res) {
 
 app.post('/users', async function (req, res) {
   console.log('app.js::postUser');
+  console.log(req.body);
 
   try {
     const result = await _index.postUser(req.headers.auth_token, req.body);
