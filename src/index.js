@@ -21,11 +21,32 @@ const helloWorld = exports.helloWorld = function helloWorld() {
     return "Hello World";
 };
 
-const getUser = exports.getUser = async function getUser(userId) {
+const getUser = exports.getUser = async function getUser(authToken, userId) {
     console.log('index.js::getUser');
-    console.log(userId);
+    
+    if (!authToken) {
+        throw {
+            message: 'Forbidden; No authToken given',
+            code: 401
+        }
+    }
+
+    if (!userId) {
+        throw {
+            message: 'Bad request; No given userId',
+            code: 400
+        }
+    }
+
     return db.where({user_id : userId}).from('users').then(
         users =>  {
+            if (users.length === 0) {
+                throw {
+                    message: 'User was not found',
+                    code: 404
+                }
+            }
+
             const {
                 user_id,
                 first_name,
@@ -45,7 +66,11 @@ const getUser = exports.getUser = async function getUser(userId) {
             }
         }
     ).catch(error => {
-        throw Error(error);
+        console.log(error);
+        throw {
+            message: error.message,
+            code: error.code
+        }
     })
 }
 

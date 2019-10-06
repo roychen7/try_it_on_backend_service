@@ -18,19 +18,27 @@ app.get('/hello_world', function (req, res) {
 
 app.get('/users/:id', async function (req, res) {
   console.log('app.js::getUser');
-  console.log(req.url);
+  // getting userId from URL
   const index = req.url.lastIndexOf('/');
   const userId = req.url.substring(index + 1);
   console.log(userId);
+  // getting authToken from queryParams
+  const authToken = req.headers['authToken'];
+
   try {
-    if (userId) {
-      const result = await _index.getUser(userId);
-      return res.send(result);
-    } else {
-      return res.send('Invalid User ID');
+    const result = await _index.getUser(authToken, userId);
+    return res.status(200).send(result);
+  } catch (error) {
+    switch (error.code) {
+      case 400: 
+        return res.status(400).send(error.message);
+      case 401:
+        return res.status(401).send(error.message);
+      case 404:
+        return res.status(404).send(error.message);
+      default:
+        return res.status(500).send('Something went wrong');
     }
-  } catch(error) {
-    return res.send(error);
   }
 });
 
