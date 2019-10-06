@@ -51,11 +51,9 @@ app.get('/users', async function (req, res) {
 
 app.post('/users', async function (req, res) {
   console.log('app.js::postUser');
-  // getting auth_token from request
-  const authToken = req.headers.auth_token;
-
+  
   try {
-    const result = await _index.postUser(authToken, req.body);
+    const result = await _index.postUser(req.headers.auth_token, req.body);
     return res.status(200).send(result);
   } catch (error) {
     switch (error.code) {
