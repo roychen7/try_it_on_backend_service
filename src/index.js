@@ -77,7 +77,7 @@ const getUsers = exports.getUsers = async function getUsers(size) {
     });
 }
 
-const postUser = exports.postUser = async function postUser(body) {
+const postUser = exports.postUser = async function postUser(authToken, body) {
     console.log('index.js::postUser');
 
     const encoded = base64encode(body.username);
@@ -107,8 +107,8 @@ const postUser = exports.postUser = async function postUser(body) {
             }
         )
     }).catch(error => {
-        console.log('There has been an error:', error);
-        throw {message: 'Something is wrong', code: 500};
+        console.log(error);
+        throw error;
     })
 }
 
