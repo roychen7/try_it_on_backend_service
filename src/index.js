@@ -127,13 +127,34 @@ const postUser = exports.postUser = async function postUser(body) {
     })
 }
 
-const putUser = exports.putUser = async function putUser(userId, body) {
+const putUser = exports.putUser = async function putUser(authToken, userId, body) {
     console.log('index.js::putUser');
 
-    if (!(body.action && body.value)) {
+    if (!authToken) {
         throw {
-            message: 'There was no action or value',
-            error: 400
+            message: 'Forbidden; No Auth Token given',
+            code: 401
+        }
+    }
+
+    if (!body || !body.action || !body.value) {
+        throw {
+            message: 'Request body not found or invalid',
+            code: 400
+        }
+    }
+
+    if (body.action != 'password' && body.action != 'first_name' && body.action != 'last_name') {
+        throw {
+            message: 'Body action invalid',
+            code: 405
+        }
+    }
+
+    if (body.value.length > 50) {
+        throw {
+            message: 'Input string too long',
+            code: 400
         }
     }
 

@@ -77,18 +77,23 @@ app.put('/users/:id', async function (req, res) {
   const userId = req.url.substring(index + 1);
   console.log(userId);
 
+  const authToken = req.headers.auth_token;
+  console.log(authToken);
+
   try {
-    if (userId && req.body) {
-      const result = await _index.putUser(userId, req.body);
-      return res.send(result);
-    } else {
-      throw {
-        message: 'Body not found',
-        code: 400
-      }
-    }
+    const result = await _index.putUser(authToken, userId, req.body);
+    return res.status(200).send(result);
   } catch (error) {
-    return res.send(error);
+    switch (error.code) {
+      case 400:
+        return res.status(400).send(error.message);
+      case 401:
+        return res.status(401).send(error.message);
+      case 405:
+        return res.status(405).send(error.message);
+      default:
+        return res.status(500).send('Something went wrong');
+    }
   }
 });
 
