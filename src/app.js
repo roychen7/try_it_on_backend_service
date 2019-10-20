@@ -18,11 +18,11 @@ app.get('/hello_world', function (req, res) {
 
 app.get('/users/:id', async function (req, res) {
   console.log('app.js::getUser');
-  // getting userId from URL
+
   const index = req.url.lastIndexOf('/');
   const userId = req.url.substring(index + 1);
   console.log(userId);
-  // getting authToken from queryParams
+
   const authToken = req.headers.auth_token;
   console.log(authToken);
 
