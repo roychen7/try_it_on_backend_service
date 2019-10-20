@@ -5,11 +5,11 @@ const { base64encode, base64decode } = require('nodejs-base64');
 const db = knex({
     client: 'pg',
     connection: {
-        host: 'localhost',
-        user: 'postgres',
-        password: 'password',
-        database: 'postgres',
-        port: 5432
+        host: process.env.POSTGRES_DB_HOST,
+        user: process.env.POSTGRES_DB_USER,
+        password: process.env.POSTGRES_DB_PASSWORD,
+        database: process.env.POSTGRES_DB_NAME,
+        port: 5432,
     }
 });
 
@@ -146,7 +146,8 @@ const postUser = exports.postUser = async function postUser(authToken, body) {
             last_name: body.last_name,
             username: body.username,
             email: body.email,
-            password: body.password
+            user_password: body.password,
+            first_time: true
         }
 
         let userid;
