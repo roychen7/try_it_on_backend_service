@@ -184,7 +184,7 @@ const putUser = exports.putUser = async function putUser(authToken, userId, body
         }
     }
 
-    if (body.action != 'password' && body.action != 'first_name' && body.action != 'last_name') {
+    if (body.action !== 'password' && body.action !== 'first_name' && body.action !== 'last_name') {
         throw {
             message: 'Body action invalid',
             code: 405
