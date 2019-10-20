@@ -11,7 +11,8 @@
     - COMMIT OFTEN!! I usually get told to commit often when I am at work, and this is because we always need to keep track   of when and if the code breaks
 
 # Starting on the Project:
-    - Make sure you run: npm i --no-optional
+    - Make sure you run: npm install --no-optional
+    - Make sure you run: npm install -g newman
     - To start the express server, run: npm run dev
     - Export your environment varaibles:
         1) Open terminal or command line
