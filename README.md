@@ -26,18 +26,4 @@
             export POSTGRES_DB_USER="postgres"
             export POSTGRES_DB_PASSWORD="password"
             export POSTGRES_DB_HOST="localhost"
-    - You may now make Postman calls to the express server to test your endpoints as you code along 
-
-# For Jenkins Pipeline setup (DEV ONLY):
-    - Please go to Jenkins.io and install Jenkins for your machine
-    - Go through all of the steps to install it on your machine 
-        -> (Create your user; change your localhost link to http://<username>:8080/)
-    - Go to **Manage Jenkins** -> **Manage PLugins** -> Click on the **Available** Tab -> On the top right corner, filter for "GitHub pull request builder" -> Select it -> Click on **Install without restart**
-    - Create a pipeline by going to the **Main Page** -> **New Item** -> **Pipeline** (enter item name:     backend-service-test) 
-        - Once that is done, do the following:
-            1) set description as "Test pipeline for backend service - Try It On"
-            2) check **GitHub project** and enter the URL: https://github.com/kendricchung/try_it_on_backend_service.git
-            3) check **This project is parameterized** and enter the following value as:
-                - Name: BRANCH_NAME
-                - Default Value: develop
-                - Description: Branch to build
+    - You may now make Postman calls to the express server to test your endpoints as you code along
