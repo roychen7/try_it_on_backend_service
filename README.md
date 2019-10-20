@@ -41,5 +41,3 @@
                 - Name: BRANCH_NAME
                 - Default Value: develop
                 - Description: Branch to build
-            4) 
-
