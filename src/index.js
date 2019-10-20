@@ -184,7 +184,7 @@ const putUser = exports.putUser = async function putUser(authToken, userId, body
         }
     }
 
-    if (body.action !== 'password' && body.action !== 'first_name' && body.action !== 'last_name') {
+    if (body.action !== 'user_password' && body.action !== 'first_name' && body.action !== 'last_name') {
         throw {
             message: 'Body action invalid',
             code: 405
@@ -207,7 +207,7 @@ const putUser = exports.putUser = async function putUser(authToken, userId, body
             .update(action, body.value)
             .then(result => {
                 if (result === 1) {
-                    return { message: 'Successfully changed ' + action + 'for ' + userId, code: 200 };
+                    return { message: 'Successfully changed ' + action + ' for ' + userId, code: 200 };
                 }
             })
     }).catch(error => {

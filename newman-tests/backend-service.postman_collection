@@ -1,0 +1,320 @@
+{
+	"info": {
+		"_postman_id": "e9c4fe82-0c0c-4eca-8548-2f186929fbb7",
+		"name": "Testing endpoints - backend service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "POST - create user",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "e185178f-d3da-4c6a-ae35-892d276c924a",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "396228b1-fc61-4466-a423-7f53c4383390",
+						"exec": [
+							"pm.test(\"POST - users status code...\", function () {",
+							"    var code = pm.response;",
+							"    ",
+							"    if (code === 201) {",
+							"        code.to.have.status(201);",
+							"    } else if (code === 200) {",
+							"        code.to.have.status(200);",
+							"    }",
+							"});",
+							"",
+							"var response = pm.response.text();",
+							"var userId = response.substring(5, response.indexOf('has'));",
+							"",
+							"pm.environment.set('user_test_id', userId.toString());"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "{{auth_token_param_name}}",
+						"value": "{{auth_token_param}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"user_id\": \"42389fesf8sf\",\r\n    \"first_name\": \"Bob\",\r\n    \"last_name\": \"Ho\",\r\n    \"username\": \"bobho1234\",\r\n    \"email\": \"bobho@gmail.com\",\r\n    \"password\": \"password1234124\"\r\n}"
+				},
+				"url": {
+					"raw": "{{host}}:{{port}}/{{endpoint}}",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"{{endpoint}}"
+					]
+				},
+				"description": "test to create user within users table"
+			},
+			"response": []
+		},
+		{
+			"name": "GET - gets the user with given userid",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "7e901f9b-be69-4269-a634-36a3352e3c91",
+						"exec": [
+							"pm.test(\"GET - users status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "{{auth_token_param_name}}",
+						"value": "{{auth_token_param}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{host}}:{{port}}/{{endpoint}}/{{user_test_id}}",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"{{endpoint}}",
+						"{{user_test_id}}"
+					]
+				},
+				"description": "test to see if the user is within the db and gets the user"
+			},
+			"response": []
+		},
+		{
+			"name": "GET - gets all user with given size",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c0d2e8b9-d2a9-4f1a-ae9b-f30a9fad1488",
+						"exec": [
+							"pm.test(\"GET - users status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "{{auth_token_param_name}}",
+						"value": "{{auth_token_param}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{host}}:{{port}}/{{endpoint}}?size=2",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"{{endpoint}}"
+					],
+					"query": [
+						{
+							"key": "size",
+							"value": "2"
+						}
+					]
+				},
+				"description": "test to see if returns all users with given size"
+			},
+			"response": []
+		},
+		{
+			"name": "PUT - update user first_name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6b4a26e7-ba58-46f4-8a21-90512202edf0",
+						"exec": [
+							"pm.test(\"PUT - users status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "{{auth_token_param_name}}",
+						"type": "text",
+						"value": "{{auth_token_param}}"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"action\" : \"first_name\",\n\t\"value\" : \"bobby\"\n}"
+				},
+				"url": {
+					"raw": "{{host}}:{{port}}/{{endpoint}}/{{user_test_id}}",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"{{endpoint}}",
+						"{{user_test_id}}"
+					]
+				},
+				"description": "test to update user information"
+			},
+			"response": []
+		},
+		{
+			"name": "PUT - update user_password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6b4a26e7-ba58-46f4-8a21-90512202edf0",
+						"exec": [
+							"pm.test(\"PUT - users status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "{{auth_token_param_name}}",
+						"value": "{{auth_token_param}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"action\" : \"user_password\",\n\t\"value\" : \"bobho123456789\"\n}"
+				},
+				"url": {
+					"raw": "{{host}}:{{port}}/{{endpoint}}/{{user_test_id}}",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"{{endpoint}}",
+						"{{user_test_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT - update user last_name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6b4a26e7-ba58-46f4-8a21-90512202edf0",
+						"exec": [
+							"pm.test(\"PUT - users status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "{{auth_token_param_name}}",
+						"type": "text",
+						"value": "{{auth_token_param}}"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"action\" : \"last_name\",\n\t\"value\" : \"lastnameofbobho\"\n}"
+				},
+				"url": {
+					"raw": "{{host}}:{{port}}/{{endpoint}}/{{user_test_id}}",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"{{endpoint}}",
+						"{{user_test_id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
