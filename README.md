@@ -11,8 +11,9 @@
     - COMMIT OFTEN!! I usually get told to commit often when I am at work, and this is because we always need to keep track   of when and if the code breaks
 
 # Starting on the Project:
-    - Make sure you run: npm i --no-optional
-    - To start the express server, run: npm run dev
+    - Make sure you run: npm install --no-optional
+    - Make sure you run: npm install -g newman
+    - To start the express server, run: npm run dev (NEED TO DO THIS TO RUN NEWMAN TESTS)
     - Export your environment varaibles:
         1) Open terminal or command line
         2) for windows please type in this:
@@ -27,3 +28,4 @@
             export POSTGRES_DB_PASSWORD="password"
             export POSTGRES_DB_HOST="localhost"
     - You may now make Postman calls to the express server to test your endpoints as you code along
+    - Now you can run the newman tests!
