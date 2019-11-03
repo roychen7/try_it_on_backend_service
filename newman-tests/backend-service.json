@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "e9c4fe82-0c0c-4eca-8548-2f186929fbb7",
+		"_postman_id": "c0b44ee7-45d5-47eb-bc69-fdaa34859863",
 		"name": "Testing endpoints - backend service",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -36,7 +36,12 @@
 							"var response = pm.response.text();",
 							"var userId = response.substring(5, response.indexOf('has'));",
 							"",
-							"pm.environment.set('user_test_id', userId.toString());"
+							"var reqBody = JSON.parse(request.data);",
+							"console.log(reqBody.username);",
+							"",
+							"pm.environment.set('user_test_id', userId.toString());",
+							"pm.environment.set('user_name', reqBody.username.toString());",
+							"pm.environment.set('user_password', reqBody.password.toString());"
 						],
 						"type": "text/javascript"
 					}
@@ -76,6 +81,67 @@
 			"response": []
 		},
 		{
+			"name": "POST - user login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "50cf50de-acc0-4b79-85ca-10fbd083cf97",
+						"exec": [
+							"console.log(pm.cookies.get('session_id'))",
+							"pm.environment.set(\"session_id_cookie\", pm.cookies.get('session_id'));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\" : \"{{user_name}}\",\n\t\"password\" : \"{{user_password}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}:{{port}}/{{endpoint}}/login?",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"{{endpoint}}",
+						"login"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "bobho1234",
+							"disabled": true
+						},
+						{
+							"key": "password",
+							"value": "password1234124",
+							"disabled": true
+						}
+					]
+				},
+				"description": "login for user"
+			},
+			"response": []
+		},
+		{
 			"name": "GET - gets the user with given userid",
 			"event": [
 				{
@@ -100,10 +166,6 @@
 						"type": "text"
 					}
 				],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
 				"url": {
 					"raw": "{{host}}:{{port}}/{{endpoint}}/{{user_test_id}}",
 					"host": [
@@ -144,10 +206,6 @@
 						"type": "text"
 					}
 				],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
 				"url": {
 					"raw": "{{host}}:{{port}}/{{endpoint}}?size=2",
 					"host": [
@@ -316,5 +374,6 @@
 			},
 			"response": []
 		}
-	]
+	],
+	"protocolProfileBehavior": {}
 }

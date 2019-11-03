@@ -1,5 +1,5 @@
 {
-	"id": "0352cf91-9056-4c02-bdaf-b3576aa5eded",
+	"id": "6d24e2ed-21a7-4e17-ab48-c1aa8801006d",
 	"name": "backend service env",
 	"values": [
 		{
@@ -24,16 +24,31 @@
 		},
 		{
 			"key": "user_test_id",
-			"value": "",
+			"value": "Ym9iaG8xMjM0 ",
 			"enabled": true
 		},
 		{
 			"key": "endpoint",
 			"value": "users",
 			"enabled": true
+		},
+		{
+			"key": "user_name",
+			"value": "bobho1234",
+			"enabled": true
+		},
+		{
+			"key": "user_password",
+			"value": "password1234124",
+			"enabled": true
+		},
+		{
+			"key": "session_id_cookie",
+			"value": "b4a8f51d2abadb639ca9773292ec3cbf2d4ff7df",
+			"enabled": true
 		}
 	],
 	"_postman_variable_scope": "environment",
-	"_postman_exported_at": "2019-10-20T23:34:41.531Z",
-	"_postman_exported_using": "Postman/7.0.9"
+	"_postman_exported_at": "2019-11-03T23:06:27.517Z",
+	"_postman_exported_using": "Postman/7.10.0"
 }
