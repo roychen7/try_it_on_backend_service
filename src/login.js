@@ -41,7 +41,8 @@ const insertSessionId = exports.insertSessionId = async function insertSessionId
               console.log(changed);
               return {
                 code: 200,
-                message: "changed: " + changed + "session_id: " + session_id
+                message: "changed: " + changed + "session_id: " + session_id,
+                session_id: session_id
               }
             }
           )

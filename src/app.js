@@ -17,6 +17,7 @@ app.use(async function (req, res, next) {
     next();
   } else {
   const sessionCookie = req.cookies.session_id;
+  console.log(sessionCookie);
   try {
     const valid = await _index.cookieValidation(sessionCookie);
     if (valid) {
@@ -35,7 +36,7 @@ app.post('/users/login', async function (req, res) {
 
   try {
     console.log("before awaiting index call");
-    const postSessionIdResult = await _login.insertSessionId(req.query.username, req.query.password);
+    const postSessionIdResult = await _login.insertSessionId(req.body.username, req.body.password);
     console.log("after awaiting index call");
       return res.cookie('session_id', postSessionIdResult.session_id, { 'maxAge': 900000 }).status(postSessionIdResult.code).send("Successfully sent cookie back to browser!");
   } catch (error) {

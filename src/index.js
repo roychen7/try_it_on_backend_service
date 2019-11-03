@@ -228,7 +228,8 @@ const userAlreadyCreated = async function userAlreadyCreated(userId) {
 const cookieValidation = exports.cookieValidation = async function cookieValidation(sessionId) {
     console.log('index.js::cookieValidation');
 
-    return db.select('session_id').where({ session_id:sessionId }).then(userSessionId => {
+    return db.select('session_id').where({ session_id:sessionId }).from('users').then(userSessionId => {
+        console.log(userSessionId);
         if (userSessionId[0]) {
             return true;
         } else {
