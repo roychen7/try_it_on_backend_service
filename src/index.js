@@ -233,6 +233,20 @@ const userAlreadyCreated = async function userAlreadyCreated(userId) {
     )
 }
 
+const cookieValidation = exports.cookieValidation = async function cookieValidation(sessionId) {
+    console.log('index.js::cookieValidation');
+
+    return db.select('session_id').where({ session_id:sessionId }).then(userSessionId => {
+        if (userSessionId[0]) {
+            return true;
+        } else {
+            return false;
+        }
+    }).catch(error => {
+        throw { message: 'Something went wrong', code: 500};
+    });
+}
+
 const isEmptyBody = function isEmptyBody(body) {
     return (body.constructor == Object && Object.keys(body).length === 0);
 }

@@ -1,13 +1,32 @@
 'use strict';
 // Import statements from files
 const _index = require('./index.js');
+const _login = require('./login.js');
 // Import statements from packages
 const express = require('express');
+var cookieParser = require('cookie-parser');
 // Init express server
 const app = express();
 const port = 3000;
 // Use express settings and features
 app.use(express.json());
+app.use(cookieParser());
+// Check if the cookie is valid
+app.use(async function (req, res, next) {
+  const sessionCookie = req.cookies.session_id;
+
+  try {
+    const valid = await _index.cookieValidation(sessionCookie);
+    if (valid) {
+      next();
+    } else {
+      throw {message: 'skrt', code: 500};
+    }
+  } catch(error) {
+    res.status(400).send('There is no cookie/cookie is invalid');
+  }
+  
+});
 
 // USE AS A TEMPLATE
 app.get('/hello_world', function (req, res) {
