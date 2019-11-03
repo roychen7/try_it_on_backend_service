@@ -1,17 +1,9 @@
 'use strict';
 
-const knex = require('knex');
+
+const _knex = require('./knex_db.js');
 const { base64encode, base64decode } = require('nodejs-base64');
-const db = knex({
-    client: 'pg',
-    connection: {
-        host: process.env.POSTGRES_DB_HOST,
-        user: process.env.POSTGRES_DB_USER,
-        password: process.env.POSTGRES_DB_PASSWORD,
-        database: process.env.POSTGRES_DB_NAME,
-        port: 5432,
-    }
-});
+const db = _knex.db;
 
 // USE AS A TEMPLATE
 const helloWorld = exports.helloWorld = function helloWorld() {
