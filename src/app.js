@@ -2,15 +2,20 @@
 // Import statements from files
 const _index = require('./index.js');
 const _login = require('./login.js');
+
 // Import statements from packages
 const express = require('express');
 var cookieParser = require('cookie-parser');
+
 // Init express server
 const app = express();
 const port = 3000;
+
 // Use express settings and features
 app.use(express.json());
+
 app.use(cookieParser());
+
 // Check if the cookie is valid
 app.use(async function (req, res, next) {
   if (req.method === "POST") {
@@ -43,6 +48,17 @@ app.post('/users/login', async function (req, res) {
     return res.status(error.code).send(error.message)
   }
 });
+
+app.post('/users/logout', async function (req, res) {
+  console.log("app.js:: /users/logout POST");
+
+  try {
+    const removeSessionIdResult = await _login.removeSessionId(req.cookies.session_id);
+    return res.status(200).send(removeSessionIdResult.message);
+  } catch (error) {
+    return res.status(error.code).send(error.message);
+  }
+})
 
 // USE AS A TEMPLATE
 app.get('/hello_world', function (req, res) {
@@ -143,8 +159,8 @@ app.put('/users/:id', async function (req, res) {
         return res.status(405).send(error.message);
       default:
         return res.status(500).send('Something went wrong');
+      }
     }
-  }
 });
 
 app.listen(port, function () {
