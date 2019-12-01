@@ -12,21 +12,21 @@ const port = 3000;
 app.use(express.json());
 app.use(cookieParser());
 // Check if the cookie is valid
-app.use(async function (req, res, next) {
-  const sessionCookie = req.cookies.session_id;
+// app.use(async function (req, res, next) {
+//   const sessionCookie = req.cookies.session_id;
 
-  try {
-    const valid = await _index.cookieValidation(sessionCookie);
-    if (valid) {
-      next();
-    } else {
-      throw {message: 'skrt', code: 500};
-    }
-  } catch(error) {
-    res.status(400).send('There is no cookie/cookie is invalid');
-  }
+//   try {
+//     const valid = await _index.cookieValidation(sessionCookie);
+//     if (valid) {
+//       next();
+//     } else {
+//       throw {message: 'skrt', code: 500};
+//     }
+//   } catch(error) {
+//     res.status(400).send('There is no cookie/cookie is invalid');
+//   }
   
-});
+// });
 
 // USE AS A TEMPLATE
 app.get('/hello_world', function (req, res) {
@@ -131,6 +131,6 @@ app.put('/users/:id', async function (req, res) {
   }
 });
 
-app.listen(port, function () {
-  return console.log('App listening on port ' + port + '!');
-});
+// app.listen(port, function () {
+//   return console.log('App listening on port ' + port + '!');
+// });
