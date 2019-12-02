@@ -3,7 +3,7 @@
 const serverless = require('serverless-http');
 // Import statements from files
 const _index = require('./index.js');
-const _login = require('./login.js');
+// const _login = require('./login.js');
 // Import statements from packages
 const express = require('express');
 var cookieParser = require('cookie-parser');

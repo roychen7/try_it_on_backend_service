@@ -2,8 +2,4 @@
 node_modules/
 .DS_Store
 src/.DS_Store
-.serverless/
-.serverless/aws-serverless-lambda.zip
-.serverless/cloudformation-template-create-stack.json
-.serverless/cloudformation-template-update-stack.json
-.serverless/serverless-stateless.json
+.serverless
