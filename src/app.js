@@ -3,7 +3,7 @@
 const serverless = require('serverless-http');
 // Import statements from files
 const _index = require('./index.js');
-// const _login = require('./login.js');
+const _login = require('./login.js');
 // Import statements from packages
 const express = require('express');
 var cookieParser = require('cookie-parser');
@@ -14,24 +14,24 @@ const port = 3000;
 app.use(express.json());
 app.use(cookieParser());
 // Check if the cookie is valid
-app.use(async function (req, res, next) {
-  if (req.method === "POST") {
-    next();
-  } else {
-  const sessionCookie = req.cookies.session_id;
-  console.log(sessionCookie);
-  try {
-    const valid = await _index.cookieValidation(sessionCookie);
-    if (valid) {
-      next();
-    } else {
-      throw {message: 'skrt', code: 500};
-    }
-  } catch(error) {
-    res.status(400).send('There is no cookie/cookie is invalid');
-  }
-}
-});
+// app.use(async function (req, res, next) {
+//   if (req.method === "POST") {
+//     next();
+//   } else {
+//   const sessionCookie = req.cookies.session_id;
+//   console.log(sessionCookie);
+//   try {
+//     const valid = await _index.cookieValidation(sessionCookie);
+//     if (valid) {
+//       next();
+//     } else {
+//       throw {message: 'skrt', code: 500};
+//     }
+//   } catch(error) {
+//     res.status(400).send('There is no cookie/cookie is invalid');
+//   }
+// }
+// });
 
 app.post('/users/login', async function (req, res) {  
   console.log("app.js:: /users/login POST")
