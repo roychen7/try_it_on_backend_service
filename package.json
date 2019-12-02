@@ -24,15 +24,16 @@
     "braces": ">=2.3.1",
     "express": "^4.17.1",
     "knex": "^0.19.4",
-    "pg": "^7.12.1"
-  },
-  "devDependencies": {
+    "pg": "^7.12.1",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-preset-es2015": "^6.24.1",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.4",
     "newman": "^4.5.5",
-    "nodejs-base64": "^1.0.3"
+    "nodejs-base64": "^1.0.3",
+    "serverless-dotenv": "^1.0.0-beta.2",
+    "serverless-http": "^2.3.0",
+    "serverless-offline": "^5.12.1"
   }
 }
