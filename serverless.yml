@@ -11,3 +11,19 @@ functions:
      - http:
          path: /hello_world
          method: get
+     - http:
+         path: /users/:id
+         method: get
+     - http:
+         path: /users
+         method: get
+     - http:
+         path: /users
+         method: post
+     - http:
+         path: /test_post
+         method: post
+     - http:
+         path: /users/:id
+         method: put
+

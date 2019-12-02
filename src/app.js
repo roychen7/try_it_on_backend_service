@@ -1,7 +1,9 @@
 'use strict';
+// For serverless
+const serverless = require('serverless-http');
 // Import statements from files
 const _index = require('./index.js');
-const _login = require('./login.js');
+// const _login = require('./login.js');
 // Import statements from packages
 const express = require('express');
 var cookieParser = require('cookie-parser');
@@ -25,14 +27,18 @@ app.use(cookieParser());
 //   } catch(error) {
 //     res.status(400).send('There is no cookie/cookie is invalid');
 //   }
-  
+
 // });
 
 // USE AS A TEMPLATE
-app.get('/hello_world', function (req, res) {
-  var result = _index.helloWorld();
-  console.log(result);
-  res.send(result);
+app.get('/hello_world', async function (req, res) {
+  let result = _index.helloWorld();
+  let response = {
+    statusCode: 200,
+    message: result
+  }
+
+  return res.send(response);
 });
 
 app.get('/users/:id', async function (req, res) {
@@ -50,7 +56,7 @@ app.get('/users/:id', async function (req, res) {
     return res.status(200).send(result);
   } catch (error) {
     switch (error.code) {
-      case 400: 
+      case 400:
         return res.status(400).send(error.message);
       case 401:
         return res.status(401).send(error.message);
@@ -71,11 +77,11 @@ app.get('/users', async function (req, res) {
   console.log(authToken);
 
   try {
-      const result = await _index.getUsers(authToken, req.query.size);
-      return res.status(200).send(result);
+    const result = await _index.getUsers(authToken, req.query.size);
+    return res.status(200).send(result);
   } catch (error) {
-    switch(error.code) {
-      case 401: 
+    switch (error.code) {
+      case 401:
         return res.status(401).send(error.message);
       case 400:
         return res.status(400).send(error.message);
@@ -134,3 +140,5 @@ app.put('/users/:id', async function (req, res) {
 // app.listen(port, function () {
 //   return console.log('App listening on port ' + port + '!');
 // });
+
+module.exports.handler = serverless(app);

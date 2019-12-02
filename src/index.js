@@ -15,9 +15,6 @@ const db = knex({
 
 // USE AS A TEMPLATE
 const helloWorld = exports.helloWorld = function helloWorld() {
-    if (db) {
-        console.log("DB connected");
-    }
     return "Hello World";
 };
 
