@@ -128,8 +128,8 @@ app.put('/users/:id', async function (req, res) {
   }
 });
 
-// app.listen(port, function () {
-//   return console.log('App listening on port ' + port + '!');
-// });
+app.listen(port, function () {
+  return console.log('App listening on port ' + port + '!');
+});
 
 module.exports.handler = serverless(app);
