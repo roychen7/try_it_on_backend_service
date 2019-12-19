@@ -3,7 +3,8 @@
 const serverless = require('serverless-http');
 // Import statements from files
 const _index = require('./index.js');
-// const _login = require('./login.js');
+const _api_types = require('./api_types');
+const _login = require('./login.js');
 // Import statements from packages
 const express = require('express');
 var cookieParser = require('cookie-parser');
@@ -33,14 +34,17 @@ app.use(cookieParser());
 // }
 // });
 
-app.post('/users/login', async function (req, res) {  
-  console.log("app.js:: /users/login POST")
+app.post('/users/login', async function (req, res) {
+  console.log("app.js:: /users/login POST") 
 
   try {
-    console.log("before awaiting index call");
-    const postSessionIdResult = await _login.insertSessionId(req.body.username, req.body.password);
-    console.log("after awaiting index call");
-      return res.cookie('session_id', postSessionIdResult.session_id, { 'maxAge': 900000 }).status(postSessionIdResult.code).send("Successfully sent cookie back to browser!");
+    let loginUserBody = new _api_types.LoginUserBody(req.body.username, req.body.password);
+    // console.log("before awaiting index call");
+    const postSessionIdResult = await _login.insertSessionId(loginUserBody);
+    // console.log("after awaiting index call");
+    return res.cookie('session_id', postSessionIdResult.session_id, {
+      'maxAge': 900000
+    }).status(postSessionIdResult.code).send("Successfully sent cookie back to browser!");
   } catch (error) {
     return res.status(error.code).send(error.message)
   }
@@ -110,9 +114,9 @@ app.get('/users', async function (req, res) {
 app.post('/users', async function (req, res) {
   console.log('app.js::postUser');
   console.log(req.body);
-
   try {
-    const result = await _index.postUser(req.headers.auth_token, req.body);
+    let createUserBody = new _api_types.CreateUserBody(req.body.first_name, req.body.last_name, req.body.username, req.body.email, req.body.password);
+    const result = await _index.postUser(req.headers.auth_token, createUserBody);
     return res.status(result.code).send(result.message);
   } catch (error) {
     switch (error.code) {
@@ -153,8 +157,8 @@ app.put('/users/:id', async function (req, res) {
   }
 });
 
-// app.listen(port, function () {
-//   return console.log('App listening on port ' + port + '!');
-// });
+app.listen(port, function () {
+  return console.log('App listening on port ' + port + '!');
+});
 
 module.exports.handler = serverless(app);
