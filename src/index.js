@@ -233,7 +233,7 @@ const cookieValidation = exports.cookieValidation = async function cookieValidat
             return false;
         }
     }).catch(error => {
-        throw { message: 'Something went wrong', code: 500};
+        throw { message: 'Something went wrong. Error: ' + error, code: 500};
     });
 }
 

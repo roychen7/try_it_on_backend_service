@@ -15,32 +15,31 @@ const port = 3000;
 app.use(express.json());
 app.use(cookieParser());
 // Check if the cookie is valid
-// app.use(async function (req, res, next) {
-//   if (req.method === "POST") {
-//     next();
-//   } else {
-//   const sessionCookie = req.cookies.session_id;
-//   console.log(sessionCookie);
-//   try {
-//     const valid = await _index.cookieValidation(sessionCookie);
-//     if (valid) {
-//       next();
-//     } else {
-//       throw {message: 'skrt', code: 500};
-//     }
-//   } catch(error) {
-//     res.status(400).send('There is no cookie/cookie is invalid');
-//   }
-// }
-// });
+app.use(async function (req, res, next) {
+  try {
+    const sessionCookie = req.cookies.session_id;
+    // console.log(sessionCookie);
+    const valid = await _index.cookieValidation(sessionCookie);
+    if (valid) {
+      next();
+    } else {
+      throw {
+        message: 'There is no cookie/cookie is invalid.',
+        code: 500
+      };
+    }
+  } catch (error) {
+    res.status(error.code).send(error.message + ' Error: ' + error);
+  }
+});
 
 app.post('/users/login', async function (req, res) {
   console.log("app.js:: /users/login POST")
 
   try {
-    console.log("before awaiting index call");
+    // console.log("before awaiting index call");
     const postSessionIdResult = await _login.insertSessionId(req.body.username, req.body.password);
-    console.log("after awaiting index call");
+    // console.log("after awaiting index call");
     return res.cookie('session_id', postSessionIdResult.session_id, {
       'maxAge': 900000
     }).status(postSessionIdResult.code).send("Successfully sent cookie back to browser!");
@@ -63,14 +62,12 @@ app.get('/hello_world', async function (req, res) {
 app.get('/users/:id', async function (req, res) {
   console.log('app.js::getUser');
 
-  const index = req.url.lastIndexOf('/');
-  const userId = req.url.substring(index + 1);
-  console.log(userId);
-
-  const authToken = req.headers.auth_token;
-  console.log(authToken);
-
   try {
+    const index = req.url.lastIndexOf('/');
+    const userId = req.url.substring(index + 1);
+    // console.log(userId);
+    const authToken = req.headers.auth_token;
+    // console.log(authToken);
     const result = await _index.getUser(authToken, userId);
     return res.status(200).send(result);
   } catch (error) {
@@ -81,13 +78,13 @@ app.get('/users/:id', async function (req, res) {
 
 app.get('/users', async function (req, res) {
   console.log('app.js::getUsers');
-  console.log(req.url);
-  console.log(req.query);
+  // console.log(req.url);
+  // console.log(req.query);
 
-  const authToken = req.headers.auth_token;
-  console.log(authToken);
+  // console.log(authToken);
 
   try {
+    const authToken = req.headers.auth_token;
     const result = await _index.getUsers(authToken, req.query.size);
     return res.status(200).send(result);
   } catch (error) {
@@ -98,7 +95,7 @@ app.get('/users', async function (req, res) {
 
 app.post('/users', async function (req, res) {
   console.log('app.js::postUser');
-  console.log(req.body);
+  // console.log(req.body);
 
   try {
     const result = await _index.postUser(req.headers.auth_token, req.body);
@@ -112,14 +109,12 @@ app.post('/users', async function (req, res) {
 app.put('/users/:id', async function (req, res) {
   console.log('app.js::putUser');
 
-  const index = req.url.lastIndexOf('/');
-  const userId = req.url.substring(index + 1);
-  console.log(userId);
-
-  const authToken = req.headers.auth_token;
-  console.log(authToken);
-
   try {
+    const index = req.url.lastIndexOf('/');
+    const userId = req.url.substring(index + 1);
+    // console.log(userId);
+    const authToken = req.headers.auth_token;
+    // console.log(authToken);
     const result = await _index.putUser(authToken, userId, req.body);
     return res.status(200).send(result);
   } catch (error) {
