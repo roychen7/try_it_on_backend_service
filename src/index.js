@@ -15,7 +15,7 @@ const getUser = exports.getUser = async function getUser(authToken, userId) {
     
     if (!authToken) {
         throw {
-            message: 'Forbidden; No authToken given',
+            message: 'Forbidden - No authToken given',
             code: 401
         }
     }
@@ -68,7 +68,7 @@ const getUsers = exports.getUsers = async function getUsers(authToken, size) {
 
     if (!authToken) {
         throw {
-            message: 'Forbidden; No authToken given', 
+            message: 'Forbidden - No authToken given', 
             code: 401
         }
     }
@@ -111,7 +111,7 @@ const postUser = exports.postUser = async function postUser(authToken, body) {
 
     if (!authToken) {
         throw {
-            message: 'Forbidden; No authToken give',
+            message: 'Forbidden - No authToken give',
             code: 401
         }
     }
@@ -161,7 +161,7 @@ const putUser = exports.putUser = async function putUser(authToken, userId, body
 
     if (!authToken) {
         throw {
-            message: 'Forbidden; No Auth Token given',
+            message: 'Forbidden - No Auth Token given',
             code: 401
         }
     }
@@ -233,7 +233,7 @@ const cookieValidation = exports.cookieValidation = async function cookieValidat
             return false;
         }
     }).catch(error => {
-        throw { message: 'Something went wrong', code: 500};
+        throw { message: 'Something went wrong. Error: ' + error, code: 500};
     });
 }
 
