@@ -15,7 +15,15 @@ class LoginUserBody {
     }
 }
 
+class UpdateUserBody {
+    constructor(action, value) {
+        this.action = action;
+        this.value = value;
+    }
+}
+
 module.exports = {
     CreateUserBody,
-    LoginUserBody
+    LoginUserBody,
+    UpdateUserBody
 };
