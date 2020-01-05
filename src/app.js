@@ -66,17 +66,6 @@ app.post('/users/logout', async function (req, res) {
   }
 })
 
-app.post('/users/logout', async function (req, res) {
-  console.log("app.js:: /users/logout POST");
-
-  try {
-    const removeSessionIdResult = await _login.removeSessionId(req.cookies.session_id);
-    return res.status(200).send(removeSessionIdResult.message);
-  } catch (error) {
-    return res.status(error.code).send(error.message);
-  }
-})
-
 // USE AS A TEMPLATE
 app.get('/hello_world', async function (req, res) {
   const result = _index.helloWorld();
