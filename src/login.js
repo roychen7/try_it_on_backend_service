@@ -13,32 +13,32 @@ const helloWorld = exports.helloWorld = async function helloWorld() {
   }
 }
 
-const insertSessionId = exports.insertSessionId = async function insertSessionId(username, password) {
+const insertSessionId = exports.insertSessionId = async function insertSessionId(loginUserBody) {
   console.log('index.js::getUserByUserAndPass');
 
-  if (!username || username === '') {
+  if (!loginUserBody.username || loginUserBody.username === '') {
     throw {
       message: 'No Username entered',
-      code:403
+      code: 403
     }
   }
-  if (!password || password === '') {
+  if (!loginUserBody.password || loginUserBody.password === '') {
     throw {
       message: "No Password entered",
       code: 403
     };
   }
-  console.log("right before db.where");
-    return db.from('users').where( {username:username, user_password:password} ).then(users => {
+  // console.log("right before db.where");
+    return db.from('users').where( {username: loginUserBody.username, user_password: loginUserBody.password} ).then(users => {
       if (users[0]){
         // return users[0].user_id;
         const user_id = users[0].user_id;
         return db.transaction(trx => {
-          console.log("in transaction")
+          // console.log("in transaction")
           const session_id = crypto.randomBytes(20).toString('hex');
           return trx.from('users').where({user_id:user_id}).update({session_id:session_id}).then(
             changed => {
-              console.log(changed);
+              // console.log(changed);
               return {
                 code: 200,
                 message: "changed: " + changed + "session_id: " + session_id,
@@ -47,7 +47,10 @@ const insertSessionId = exports.insertSessionId = async function insertSessionId
             }
           )
         }).catch(error => {
-          throw error;
+          throw {
+            message: error,
+            code: 500
+          };
         })
     } else {
       throw {
@@ -56,6 +59,9 @@ const insertSessionId = exports.insertSessionId = async function insertSessionId
       };
     }
   }).catch(error => {
-    throw error;
+    throw {
+      message: error,
+      code: 500
+    };
   })
 }

@@ -21,9 +21,6 @@ functions:
          path: /users
          method: post
      - http:
-         path: /test_post
-         method: post
-     - http:
          path: /users/:id
          method: put
 

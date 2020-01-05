@@ -106,7 +106,7 @@ const getUsers = exports.getUsers = async function getUsers(authToken, size) {
     });
 }
 
-const postUser = exports.postUser = async function postUser(authToken, body) {
+const postUser = exports.postUser = async function postUser(authToken, createUserBody) {
     console.log('index.js::postUser');
 
     if (!authToken) {
@@ -116,14 +116,14 @@ const postUser = exports.postUser = async function postUser(authToken, body) {
         }
     }
 
-    if (isEmptyBody(body)) {
+    if (isEmptyBody(createUserBody)) {
         throw {
             message: 'Body was not found',
             code: 400
         };
     }
 
-    const encoded = base64encode(body.username);
+    const encoded = base64encode(createUserBody.username);
     if (await userAlreadyCreated(encoded)) {
         return { message: "user " + encoded + " has already been created", code: 201 };
     }
@@ -131,11 +131,11 @@ const postUser = exports.postUser = async function postUser(authToken, body) {
     return db.transaction(trans => {
         const userRow = {
             user_id: encoded,
-            first_name: body.first_name,
-            last_name: body.last_name,
-            username: body.username,
-            email: body.email,
-            user_password: body.password,
+            first_name: createUserBody.first_name,
+            last_name: createUserBody.last_name,
+            username: createUserBody.username,
+            email: createUserBody.email,
+            user_password: createUserBody.password,
             first_time: true
         }
 
