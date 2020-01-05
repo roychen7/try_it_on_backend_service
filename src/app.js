@@ -57,7 +57,6 @@ app.post('/users/login', async function (req, res) {
 
 app.post('/users/logout', async function (req, res) {
   console.log("app.js:: /users/logout POST");
-
   try {
     const removeSessionIdResult = await _login.removeSessionId(req.cookies.session_id);
     return res.status(200).send(removeSessionIdResult.message);
@@ -84,9 +83,7 @@ app.get('/users/:id', async function (req, res) {
     const index = req.url.lastIndexOf('/');
     const userId = req.url.substring(index + 1);
     // console.log(userId);
-    const authToken = req.headers.auth_token;
-    // console.log(authToken);
-    const result = await _index.getUser(authToken, userId);
+    const result = await _index.getUser(userId);
     return res.status(200).send(result);
   } catch (error) {
     let errorObject = _errorHandler.errorHandler(error.code, req.path, error.message);
@@ -99,11 +96,9 @@ app.get('/users', async function (req, res) {
   // console.log(req.url);
   // console.log(req.query);
 
-  // console.log(authToken);
 
   try {
-    const authToken = req.headers.auth_token;
-    const result = await _index.getUsers(authToken, req.query.size);
+    const result = await _index.getUsers(req.query.size);
     return res.status(200).send(result);
   } catch (error) {
     let errorObject = _errorHandler.errorHandler(error.code, req.path, error.message);
@@ -117,7 +112,7 @@ app.post('/users', async function (req, res) {
 
   try {
     const createUserBody = new _api_types.CreateUserBody(req.body.first_name, req.body.last_name, req.body.username, req.body.email, req.body.password);
-    const result = await _index.postUser(req.headers.auth_token, createUserBody);
+    const result = await _index.postUser(createUserBody);
     return res.status(result.code).send(result.message);
   } catch (error) {
     let errorObject = _errorHandler.errorHandler(error.code, req.path, error.message);
@@ -131,10 +126,7 @@ app.put('/users/:id', async function (req, res) {
   try {
     const index = req.url.lastIndexOf('/');
     const userId = req.url.substring(index + 1);
-    // console.log(userId);
-    const authToken = req.headers.auth_token;
-    // console.log(authToken);
-    const result = await _index.putUser(authToken, userId, req.body);
+    const result = await _index.putUser(userId, req.body);
     return res.status(200).send(result);
   } catch (error) {
     let errorObject = _errorHandler.errorHandler(error.code, req.path, error.message);
