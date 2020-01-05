@@ -48,7 +48,6 @@ const getUser = exports.getUser = async function getUser(userId) {
             }
         }
     ).catch(error => {
-        console.log(error);
         throw {
             message: error.message,
             code: error.code
@@ -87,7 +86,6 @@ const getUsers = exports.getUsers = async function getUsers(size) {
             };
         }
     ).catch(error => {
-        console.log(error);
         throw error;
     });
 }
@@ -122,7 +120,6 @@ const postUser = exports.postUser = async function postUser(createUserBody) {
 
         return trans.insert(userRow, 'user_id').into('users').then(
             ids => {
-                console.log(ids);
                 userid = ids[0];
                 if (userid) {
                     return { message: "user " + userid + " has been created", code: 200 };
@@ -130,7 +127,6 @@ const postUser = exports.postUser = async function postUser(createUserBody) {
             }
         )
     }).catch(error => {
-        console.log(error);
         throw error;
     })
 }
@@ -172,7 +168,6 @@ const putUser = exports.putUser = async function putUser(userId, body) {
                 }
             })
     }).catch(error => {
-        console.log(error);
         throw { message: 'Something went wrong', code: 500 }
     });
 }
@@ -182,7 +177,6 @@ const userAlreadyCreated = async function userAlreadyCreated(userId) {
 
     return db.select('user_id').where({ user_id: userId }).from('users').then(
         ids => {
-            console.log(ids);
             let result;
             if (ids.length === 0) {
                 result = false;
@@ -198,7 +192,6 @@ const cookieValidation = exports.cookieValidation = async function cookieValidat
     console.log('index.js::cookieValidation');
 
     return db.select('session_id').where({ session_id:sessionId }).from('users').then(userSessionId => {
-        console.log(userSessionId);
         if (userSessionId[0]) {
             return true;
         } else {
