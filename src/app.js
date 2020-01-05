@@ -32,11 +32,14 @@ app.use(async function (req, res, next) {
       } else {
         throw {
           message: 'There is no cookie/cookie is invalid.',
-          code: 500
+          code: 404
         };
       }
     } else {
-      next();
+      throw {
+        message: 'There is no cookie/cookie is invalid.',
+        code: 500
+      };
     }
 
   } catch (error) {
