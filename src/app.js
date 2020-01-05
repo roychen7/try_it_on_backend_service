@@ -5,16 +5,21 @@ const serverless = require('serverless-http');
 const _index = require('./index.js');
 const _api_types = require('./api_types');
 const _login = require('./login.js');
+
 // Import statements from packages
 const express = require('express');
 const _errorHandler = require('./error_handler.js');
 var cookieParser = require('cookie-parser');
+
 // Init express server
 const app = express();
 const port = 3000;
+
 // Use express settings and features
 app.use(express.json());
+
 app.use(cookieParser());
+
 // Check if the cookie is valid
 // app.use(async function (req, res, next) {
 //   try {
@@ -49,6 +54,17 @@ app.post('/users/login', async function (req, res) {
     return res.status(error.code).send(error.message)
   }
 });
+
+app.post('/users/logout', async function (req, res) {
+  console.log("app.js:: /users/logout POST");
+
+  try {
+    const removeSessionIdResult = await _login.removeSessionId(req.cookies.session_id);
+    return res.status(200).send(removeSessionIdResult.message);
+  } catch (error) {
+    return res.status(error.code).send(error.message);
+  }
+})
 
 // USE AS A TEMPLATE
 app.get('/hello_world', async function (req, res) {
