@@ -10,15 +10,8 @@ const helloWorld = exports.helloWorld = function helloWorld() {
     return "Hello World";
 };
 
-const getUser = exports.getUser = async function getUser(authToken, userId) {
+const getUser = exports.getUser = async function getUser(userId) {
     console.log('index.js::getUser');
-    
-    if (!authToken) {
-        throw {
-            message: 'Forbidden - No authToken given',
-            code: 401
-        }
-    }
 
     if (!userId) {
         throw {
@@ -63,15 +56,8 @@ const getUser = exports.getUser = async function getUser(authToken, userId) {
     })
 }
 
-const getUsers = exports.getUsers = async function getUsers(authToken, size) {
+const getUsers = exports.getUsers = async function getUsers(size) {
     console.log('index.js::getUsers');
-
-    if (!authToken) {
-        throw {
-            message: 'Forbidden - No authToken given', 
-            code: 401
-        }
-    }
 
     if (!size) {
         throw {
@@ -106,15 +92,8 @@ const getUsers = exports.getUsers = async function getUsers(authToken, size) {
     });
 }
 
-const postUser = exports.postUser = async function postUser(authToken, createUserBody) {
+const postUser = exports.postUser = async function postUser(createUserBody) {
     console.log('index.js::postUser');
-
-    if (!authToken) {
-        throw {
-            message: 'Forbidden - No authToken give',
-            code: 401
-        }
-    }
 
     if (isEmptyBody(createUserBody)) {
         throw {
@@ -156,16 +135,9 @@ const postUser = exports.postUser = async function postUser(authToken, createUse
     })
 }
 
-const putUser = exports.putUser = async function putUser(authToken, userId, body) {
+const putUser = exports.putUser = async function putUser(userId, body) {
     console.log('index.js::putUser');
-
-    if (!authToken) {
-        throw {
-            message: 'Forbidden - No Auth Token given',
-            code: 401
-        }
-    }
-
+    
     if (!body || !body.action || !body.value) {
         throw {
             message: 'Request body not found or invalid',
