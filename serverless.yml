@@ -23,4 +23,7 @@ functions:
      - http:
          path: /users/:id
          method: put
+     - http:
+         path: /users/login
+         method: post
 
