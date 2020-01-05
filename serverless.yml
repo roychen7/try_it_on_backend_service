@@ -26,4 +26,7 @@ functions:
      - http:
          path: /users/login
          method: post
+     - http:
+         path: /users/logout 
+         method: post
 
