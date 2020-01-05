@@ -23,26 +23,43 @@ app.use(cookieParser());
 // Check if the cookie is valid
 app.use(async function (req, res, next) {
   try {
-    const sessionCookie = req.cookies.session_id;
-    // console.log(sessionCookie);
-    const valid = await _index.cookieValidation(sessionCookie);
-    if (valid) {
-      next();
+    const stateEndpoint = checkUserEndpoint(req.path, req.method);
+    if (stateEndpoint) {
+      const sessionCookie = req.cookies.session_id;
+      const valid = await _index.cookieValidation(sessionCookie);
+      if (valid) {
+        next();
+      } else {
+        throw {
+          message: 'There is no cookie/cookie is invalid.',
+          code: 500
+        };
+      }
     } else {
-      throw {
-        message: 'There is no cookie/cookie is invalid.',
-        code: 500
-      };
+      next();
     }
+
   } catch (error) {
     res.status(error.code).send(error.message + ' Error: ' + error);
   }
 });
 
-
+const checkUserEndpoint = function checkUserEndpoint(path, methodType) {
+  if (path === '/users' && methodType === 'GET') {
+    return true;
+  } else if (path === '/users/logout' && methodType === 'POST') {
+    return true;
+  } else if (path.substring(0, path.lastIndexOf('/') + 1) === '/users/' && methodType === 'GET') {
+    return true;
+  } else if (path.substring(0, path.lastIndexOf('/') + 1) === '/users/' && methodType === 'PUT') {
+    return true;
+  } else {
+    return false;
+  }
+}
 
 app.post('/users/login', async function (req, res) {
-  console.log("app.js:: /users/login POST") 
+  console.log("app.js:: /users/login POST")
 
   try {
     const loginUserBody = new _api_types.LoginUserBody(req.body.username, req.body.password);
