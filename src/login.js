@@ -28,17 +28,14 @@ const insertSessionId = exports.insertSessionId = async function insertSessionId
       code: 403
     };
   }
-  // console.log("right before db.where");
     return db.from('users').where( {username: loginUserBody.username, user_password: loginUserBody.password} ).then(users => {
       if (users[0]){
         // return users[0].user_id;
         const user_id = users[0].user_id;
         return db.transaction(trx => {
-          // console.log("in transaction")
           const session_id = crypto.randomBytes(20).toString('hex');
           return trx.from('users').where({user_id:user_id}).update({session_id:session_id}).then(
             changed => {
-              // console.log(changed);
               return {
                 code: 200,
                 message: "changed: " + changed + "session_id: " + session_id,
