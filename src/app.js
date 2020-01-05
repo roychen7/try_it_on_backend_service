@@ -148,31 +148,13 @@ app.put('/users/:id', async function (req, res) {
     const result = await _index.putUser(authToken, userId, req.body);
     return res.status(200).send(result);
   } catch (error) {
-<<<<<<< HEAD
     let errorObject = _errorHandler.errorHandler(error.code, req.path, error.message);
     return res.status(error.code).send("Error: " + errorObject.message + ". " + "Endpoint: " + errorObject.endpoint);
   }
-=======
-    switch (error.code) {
-      case 400:
-        return res.status(400).send(error.message);
-      case 401:
-        return res.status(401).send(error.message);
-      case 405:
-        return res.status(405).send(error.message);
-      default:
-        return res.status(500).send('Something went wrong');
-      }
-    }
->>>>>>> 80fa92b4027b78a63f813390a3e2cc2480d34fe5
 });
 
 app.listen(port, function () {
   return console.log('App listening on port ' + port + '!');
-<<<<<<< HEAD
 });
 
 module.exports.handler = serverless(app);
-=======
-});
->>>>>>> 80fa92b4027b78a63f813390a3e2cc2480d34fe5
