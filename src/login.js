@@ -83,3 +83,21 @@ const removeSessionId = exports.removeSessionId = async function removeSessionId
     throw error;
   })
 }
+
+const removeSessionId = exports.removeSessionId = async function removeSessionId(session_id) {
+  return db.transaction(trx => {
+    return trx.from('users').where({session_id: session_id}).update({session_id: null}).then(
+      changed => {
+        console.log(changed);
+        return{
+          code: 200,
+          message: "changed: " + changed
+        }
+      }
+    ).catch(error => {
+      throw error;
+    })
+  }).catch(error => {
+    throw error;
+  })
+}
