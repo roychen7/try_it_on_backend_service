@@ -38,7 +38,7 @@ app.post('/users/login', async function (req, res) {
   console.log("app.js:: /users/login POST") 
 
   try {
-    let loginUserBody = new _api_types.LoginUserBody(req.body.username, req.body.password);
+    const loginUserBody = new _api_types.LoginUserBody(req.body.username, req.body.password);
     // console.log("before awaiting index call");
     const postSessionIdResult = await _login.insertSessionId(loginUserBody);
     // console.log("after awaiting index call");
@@ -52,8 +52,8 @@ app.post('/users/login', async function (req, res) {
 
 // USE AS A TEMPLATE
 app.get('/hello_world', async function (req, res) {
-  let result = _index.helloWorld();
-  let response = {
+  const result = _index.helloWorld();
+  const response = {
     statusCode: 200,
     message: result
   }
@@ -115,7 +115,7 @@ app.post('/users', async function (req, res) {
   console.log('app.js::postUser');
   console.log(req.body);
   try {
-    let createUserBody = new _api_types.CreateUserBody(req.body.first_name, req.body.last_name, req.body.username, req.body.email, req.body.password);
+    const createUserBody = new _api_types.CreateUserBody(req.body.first_name, req.body.last_name, req.body.username, req.body.email, req.body.password);
     const result = await _index.postUser(req.headers.auth_token, createUserBody);
     return res.status(result.code).send(result.message);
   } catch (error) {
