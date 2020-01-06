@@ -12,7 +12,7 @@ functions:
          path: /hello_world
          method: get
      - http:
-         path: /users/:id
+         path: /users/{id}
          method: get
      - http:
          path: /users
@@ -21,7 +21,7 @@ functions:
          path: /users
          method: post
      - http:
-         path: /users/:id
+         path: /users/{id}
          method: put
      - http:
          path: /users/login
