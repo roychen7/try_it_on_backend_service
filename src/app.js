@@ -31,15 +31,12 @@ app.use(async function (req, res, next) {
         next();
       } else {
         throw {
-          message: 'There is no cookie/cookie is invalid.',
+          message: 'Cookie invalid',
           code: 404
         };
       }
     } else {
-      throw {
-        message: 'There is no cookie/cookie is invalid.',
-        code: 500
-      };
+      next();
     }
 
   } catch (error) {
@@ -148,8 +145,8 @@ app.put('/users/:id', async function (req, res) {
   }
 });
 
-app.listen(port, function () {
-  return console.log('App listening on port ' + port + '!');
-});
+// app.listen(port, function () {
+//   return console.log('App listening on port ' + port + '!');
+// });
 
 module.exports.handler = serverless(app);
